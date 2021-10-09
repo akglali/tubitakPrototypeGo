@@ -2,10 +2,11 @@ package patientTracker
 
 type locationInfo struct {
 	PatientId string
-	BeaconId string
+	BeaconId  string
+	Distance  string
 }
 
 type allBeaconsInfo struct {
-	BeaconId string
+	BeaconId         string
 	LocationOfBeacon string
 }
