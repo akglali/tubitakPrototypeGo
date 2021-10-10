@@ -27,7 +27,7 @@ func login(c *gin.Context) {
 		return
 	}
 	var patientId, patientName string
-	err = database.Db.QueryRow("select patient_id,patient_name,patient_tc from patient_table where patient_tc=$1", body.PatientTc).Scan(&patientId, &patientName)
+	err = database.Db.QueryRow("select patient_id,patient_name from patient_table where patient_tc=$1", body.PatientTc).Scan(&patientId, &patientName)
 	if err != nil {
 		helpers.MyAbort(c, "There is no such a patient")
 		return

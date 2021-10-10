@@ -8,7 +8,7 @@ import (
 	patientTracker2 "tubitakPrototypeGo/patientTracker"
 )
 
-func main()  {
+func main() {
 	router := gin.Default()
 	database.ConnectDatabase() // connection starts at the beginning
 	router.Use(func(context *gin.Context) {
@@ -19,20 +19,16 @@ func main()  {
 			context.Status(200)
 			context.Abort()
 		}
-
 	})
-
 	//this is for the patient info
 	patient := router.Group("/patient")
 	login.SetupLogin(patient)
 
-
-
 	//this is for patient tracking. It sends the patient travelling information catching by beacon.
-	patientTracker :=router.Group("/track")
+	patientTracker := router.Group("/track")
 	patientTracker2.PatientTrackerSetup(patientTracker)
 
-	err:=router.Run(":8000")
+	err := router.Run(":8000")
 	if err != nil {
 		fmt.Println("Connection can not be completed!")
 		return
