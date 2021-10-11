@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"tubitakPrototypeGo/adminPanel"
 	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/login"
 	patientTracker2 "tubitakPrototypeGo/patientTracker"
@@ -27,6 +28,9 @@ func main() {
 	//this is for patient tracking. It sends the patient travelling information catching by beacon.
 	patientTracker := router.Group("/track")
 	patientTracker2.PatientTrackerSetup(patientTracker)
+
+	admin := router.Group("/admin")
+	adminPanel.SetupAdminPanel(admin)
 
 	err := router.Run(":8000")
 	if err != nil {
