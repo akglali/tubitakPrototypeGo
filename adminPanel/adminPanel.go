@@ -11,7 +11,9 @@ func SetupAdminPanel(rg *gin.RouterGroup) {
 	rg.GET("/all_patients_admin", getAllPatientInfo)
 	rg.POST("/add_admin", signup)
 	rg.POST("/login_admin", login)
-	rg.GET("/get_info/:patientId", getSinglePatientTrackingInfo)
+	rg.GET("/get_info_patient/:patientId", getSinglePatientTrackingInfo)
+	rg.GET("/get_info_beacon/:beaconId", getSingleBeaconTrackingInfo)
+
 }
 
 func login(c *gin.Context) {
@@ -70,5 +72,16 @@ func getSinglePatientTrackingInfo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, allPatientTrackInfo)
+
+}
+
+func getSingleBeaconTrackingInfo(c *gin.Context) {
+	beaconId := c.Param("beaconId")
+	allBeaconTrackingInfo, err := getSingleBeaconId(beaconId)
+	if err != nil {
+		helpers.MyAbort(c, "Something went wrong for "+beaconId)
+		return
+	}
+	c.JSON(200, allBeaconTrackingInfo)
 
 }

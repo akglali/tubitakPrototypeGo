@@ -31,3 +31,12 @@ type singlePatientTrackingStruct struct {
 	Distance       string
 	SeenTime       string
 }
+type singleBeaconTrackingStruct struct {
+	PatientTc string
+	SeenTime  string
+	Distance  string
+	Location  string
+	MapInfo   string
+	Major     string
+	Minor     string
+}

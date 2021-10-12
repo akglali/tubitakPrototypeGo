@@ -42,7 +42,7 @@ func getAllPatientRows() ([]allPatientInfo, error) {
 
 func getSinglePatientRows(patientId string) ([]singlePatientTrackingStruct, error) {
 
-	rows, err := database.Db.Query("select bdt.device_id,location,distance,seen_time from patient_tracker_info_table  left join beacon_devices_table as bdt on patient_tracker_info_table.beacon_id = bdt.device_id where patient_id=$1 order by seen_time desc", patientId)
+	rows, err := database.Db.Query("select bdt.device_id,location,distance,seen_time from patient_tracker_info_table  left join beacon_devices_table as bdt on patient_tracker_info_table.beacon_id = bdt.device_id left join patient_table as pt on pt.patient_id=patient_tracker_info_table.patient_id where patient_tc=$1  order by seen_time desc", patientId)
 	if err != nil {
 		return nil, err
 	}
@@ -57,6 +57,22 @@ func getSinglePatientRows(patientId string) ([]singlePatientTrackingStruct, erro
 	return allRows, err
 }
 
+func getSingleBeaconId(beaconId string) ([]singleBeaconTrackingStruct, error) {
+	rows, err := database.Db.Query("select pt.patient_tc,seen_time,distance,bdt.location,bdt.google_map_link,bdt.minor,bdt.major from patient_tracker_info_table left join patient_table pt on patient_tracker_info_table.patient_id = pt.patient_id left join beacon_devices_table as bdt  on  bdt.device_id=patient_tracker_info_table.beacon_id where beacon_id=$1 order by seen_time", beaconId)
+	if err != nil {
+		return nil, err
+	}
+	var allRows []singleBeaconTrackingStruct
+	for rows.Next() {
+		var row singleBeaconTrackingStruct
+		if err := rows.Scan(&row.PatientTc, &row.SeenTime, &row.Distance, &row.Location, &row.MapInfo, &row.Minor, &row.Major); err != nil {
+			return allRows, err
+		}
+		allRows = append(allRows, row)
+	}
+	return allRows, err
+
+}
 func getAllBeaconRows() ([]allBeaconInfo, error) {
 	rows, err := database.Db.Query("select * from beacon_devices_table")
 	if err != nil {
