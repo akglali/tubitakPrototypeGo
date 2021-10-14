@@ -30,6 +30,7 @@ type singlePatientTrackingStruct struct {
 	BeaconLocation string
 	Distance       string
 	SeenTime       string
+	MapInfo        string
 }
 type singleBeaconTrackingStruct struct {
 	PatientTc string

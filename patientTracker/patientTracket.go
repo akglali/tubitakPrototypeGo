@@ -7,6 +7,7 @@ import (
 	"time"
 	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
+	"tubitakPrototypeGo/patientTracker/patientTrackerDb"
 )
 
 func PatientTrackerSetup(rg *gin.RouterGroup) {
@@ -29,7 +30,7 @@ func sendLocation(c *gin.Context) {
 	currentTime := time.Now().Format("Mon Jan _2 15:04:05 2006")
 	distance, _ := decimal.NewFromString(body.Distance)
 
-	_, err = database.Db.Query("insert into patient_tracker_info_table( patient_id, beacon_id, seen_time, distance) values ($1,$2,$3,$4)", body.PatientId, body.BeaconId, currentTime, distance)
+	_, err = patientTrackerDb.SendLocationInfoDb(body.PatientId, body.BeaconId, currentTime, distance)
 	c.JSON(200, "New location Is added")
 
 }

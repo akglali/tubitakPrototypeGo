@@ -2,10 +2,9 @@ package login
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
+	"tubitakPrototypeGo/login/loginDb"
 )
 
 func SetupLogin(rg *gin.RouterGroup) {
@@ -22,12 +21,11 @@ func login(c *gin.Context) {
 	}
 	err = json.Unmarshal(data, &body)
 	if err != nil {
-		fmt.Println(body.PatientTc)
 		helpers.MyAbort(c, "Bad Input")
 		return
 	}
 	var patientId, patientName string
-	err = database.Db.QueryRow("select patient_id,patient_name from patient_table where patient_tc=$1", body.PatientTc).Scan(&patientId, &patientName)
+	err = loginDb.LoginForPatient(body.PatientTc, &patientId, &patientName)
 	if err != nil {
 		helpers.MyAbort(c, "There is no such a patient")
 		return

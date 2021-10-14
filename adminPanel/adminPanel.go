@@ -2,7 +2,7 @@ package adminPanel
 
 import (
 	"github.com/gin-gonic/gin"
-	"tubitakPrototypeGo/database"
+	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
 	"tubitakPrototypeGo/helpers"
 )
 
@@ -19,7 +19,7 @@ func SetupAdminPanel(rg *gin.RouterGroup) {
 func login(c *gin.Context) {
 	body, err := loginStructFunc(c)
 	var password string
-	err = database.Db.QueryRow("select admin_password  from admin_table where admin_username=$1", body.Username).Scan(&password)
+	err = adminPanelDatabase.LoginDb(body.Username, &password)
 	if err != nil {
 		helpers.MyAbort(c, "Admin could not be found")
 		return
@@ -39,7 +39,7 @@ func signup(c *gin.Context) {
 	body, err := loginStructFunc(c)
 	password, _ := HashPassword(body.Password)
 	var username string
-	err = database.Db.QueryRow("insert into admin_table(admin_username, admin_password) VALUES($1,$2) returning admin_username", body.Username, password).Scan(&username)
+	err = adminPanelDatabase.SignUpDb(body.Username, password, &username)
 	if err != nil {
 		helpers.MyAbort(c, "Admin Is already exist")
 		return

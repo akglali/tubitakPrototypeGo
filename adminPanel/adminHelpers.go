@@ -3,10 +3,13 @@ package adminPanel
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"tubitakPrototypeGo/database"
+	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
 	"tubitakPrototypeGo/helpers"
 )
 
+//adminHelpers helps us to simplify the code
+
+// it is the struct that I use signup and login.
 func loginStructFunc(c *gin.Context) (loginStruct, error) {
 	body := loginStruct{}
 	data, err := c.GetRawData()
@@ -22,9 +25,10 @@ func loginStructFunc(c *gin.Context) (loginStruct, error) {
 	return body, err
 }
 
+//Getting all patients information
 func getAllPatientRows() ([]allPatientInfo, error) {
 
-	rows, err := database.Db.Query("select patient_tc,patient_name,patient_bd,patient_relative_name,patient_relative_phone_number,patient_relative_name2,patient_relative_phone_number2,patient_gender,patient_address from patient_table")
+	rows, err := adminPanelDatabase.GetAllPatientDb()
 	if err != nil {
 		return nil, err
 	}
@@ -40,16 +44,17 @@ func getAllPatientRows() ([]allPatientInfo, error) {
 
 }
 
+//getting single patient tracking information to be able to see their path.
 func getSinglePatientRows(patientId string) ([]singlePatientTrackingStruct, error) {
 
-	rows, err := database.Db.Query("select bdt.device_id,location,distance,seen_time from patient_tracker_info_table  left join beacon_devices_table as bdt on patient_tracker_info_table.beacon_id = bdt.device_id left join patient_table as pt on pt.patient_id=patient_tracker_info_table.patient_id where patient_tc=$1  order by seen_time desc", patientId)
+	rows, err := adminPanelDatabase.GetSinglePatientRowsDb(patientId)
 	if err != nil {
 		return nil, err
 	}
 	var allRows []singlePatientTrackingStruct
 	for rows.Next() {
 		var row singlePatientTrackingStruct
-		if err := rows.Scan(&row.BeaconId, &row.BeaconLocation, &row.Distance, &row.SeenTime); err != nil {
+		if err := rows.Scan(&row.BeaconId, &row.BeaconLocation, &row.Distance, &row.SeenTime, &row.MapInfo); err != nil {
 			return allRows, err
 		}
 		allRows = append(allRows, row)
@@ -57,8 +62,9 @@ func getSinglePatientRows(patientId string) ([]singlePatientTrackingStruct, erro
 	return allRows, err
 }
 
+//getting single beacon tracking info. So admin can see all patients that are tracked by the beacon
 func getSingleBeaconId(beaconId string) ([]singleBeaconTrackingStruct, error) {
-	rows, err := database.Db.Query("select pt.patient_tc,seen_time,distance,bdt.location,bdt.google_map_link,bdt.minor,bdt.major from patient_tracker_info_table left join patient_table pt on patient_tracker_info_table.patient_id = pt.patient_id left join beacon_devices_table as bdt  on  bdt.device_id=patient_tracker_info_table.beacon_id where beacon_id=$1 order by seen_time", beaconId)
+	rows, err := adminPanelDatabase.GetSingleBeaconIdDb(beaconId)
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +79,10 @@ func getSingleBeaconId(beaconId string) ([]singleBeaconTrackingStruct, error) {
 	return allRows, err
 
 }
+
+// getting all beacon list
 func getAllBeaconRows() ([]allBeaconInfo, error) {
-	rows, err := database.Db.Query("select * from beacon_devices_table")
+	rows, err := adminPanelDatabase.GetAllBeaconRowsDb()
 	if err != nil {
 		return nil, err
 	}
