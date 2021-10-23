@@ -21,7 +21,7 @@ func SignUpDb(username, password string, savedUsername *string) error {
 //Patient Calls
 
 func GetAllPatientDb() (*sql.Rows, error) {
-	rows, err := database.Db.Query("select patient_tc,patient_name,patient_surname,patient_gender,patient_address from patient_table")
+	rows, err := database.Db.Query("select distinct on (patient_name) patient_tc, patient_name, patient_surname, patient_gender, ptit.seen_time from patient_table left join patient_tracker_info_table ptit on patient_table.patient_id = ptit.patient_id order by patient_name,ptit.seen_time desc nulls last , 1;")
 	return rows, err
 }
 
