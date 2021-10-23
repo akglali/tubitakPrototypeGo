@@ -1,6 +1,7 @@
 package adminPanel
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
 	"tubitakPrototypeGo/helpers"
@@ -12,6 +13,7 @@ func SetupAdminPanel(rg *gin.RouterGroup) {
 	rg.POST("/add_admin", signup)
 	rg.POST("/login_admin", login)
 	rg.GET("/get_info_patient/:patientId", getSinglePatientTrackingInfo)
+	rg.GET("/get_single_patient/:singlePatientId", getSinglePatientInfo)
 	rg.GET("/get_info_beacon/:beaconId", getSingleBeaconTrackingInfo)
 
 }
@@ -79,9 +81,16 @@ func getSingleBeaconTrackingInfo(c *gin.Context) {
 	beaconId := c.Param("beaconId")
 	allBeaconTrackingInfo, err := getSingleBeaconId(beaconId)
 	if err != nil {
+		fmt.Println(err.Error())
 		helpers.MyAbort(c, "Something went wrong for "+beaconId)
 		return
 	}
 	c.JSON(200, allBeaconTrackingInfo)
+}
+
+func getSinglePatientInfo(c *gin.Context) {
+	patientId := c.Param("singlePatientId")
+	row := getSinglePatientInfoRow(patientId)
+	c.JSON(200, row)
 
 }

@@ -3,6 +3,14 @@ package adminPanel
 type allPatientInfo struct {
 	PatientTc      string
 	PatientName    string
+	PatientSurname string
+	PatientGender  string
+	PatientAddress string
+}
+type allSinglePatientInfo struct {
+	PatientTc      string
+	PatientName    string
+	PatientSurname string
 	PatientBd      string
 	PatientR1Name  string
 	PatientR1Num   string

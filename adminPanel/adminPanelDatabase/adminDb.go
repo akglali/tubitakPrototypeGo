@@ -21,7 +21,7 @@ func SignUpDb(username, password string, savedUsername *string) error {
 //Patient Calls
 
 func GetAllPatientDb() (*sql.Rows, error) {
-	rows, err := database.Db.Query("select patient_tc,patient_name,patient_bd,patient_relative_name,patient_relative_phone_number,patient_relative_name2,patient_relative_phone_number2,patient_gender,patient_address from patient_table")
+	rows, err := database.Db.Query("select patient_tc,patient_name,patient_surname,patient_gender,patient_address from patient_table")
 	return rows, err
 }
 

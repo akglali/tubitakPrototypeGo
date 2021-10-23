@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
+	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
 )
 
@@ -35,7 +36,7 @@ func getAllPatientRows() ([]allPatientInfo, error) {
 	var patientsInfo []allPatientInfo
 	for rows.Next() {
 		var patient allPatientInfo
-		if err := rows.Scan(&patient.PatientTc, &patient.PatientName, &patient.PatientBd, &patient.PatientR1Name, &patient.PatientR1Num, &patient.PatientR2Name, &patient.PatientR2Num, &patient.PatientGender, &patient.PatientAddress); err != nil {
+		if err := rows.Scan(&patient.PatientTc, &patient.PatientName, &patient.PatientSurname, &patient.PatientGender, &patient.PatientAddress); err != nil {
 			return patientsInfo, err
 		}
 		patientsInfo = append(patientsInfo, patient)
@@ -96,4 +97,17 @@ func getAllBeaconRows() ([]allBeaconInfo, error) {
 		beaconsInfo = append(beaconsInfo, pst)
 	}
 	return beaconsInfo, err
+}
+
+//get single patients all information
+
+func getSinglePatientInfoRow(patientId string) allSinglePatientInfo {
+
+	var patientInfo allSinglePatientInfo
+	row := database.Db.QueryRow("select patient_tc,patient_name,patient_surname,patient_bd,patient_relative_name2,patient_relative_phone_number,patient_relative_name,patient_relative_phone_number2,patient_gender,patient_address from patient_table where patient_tc=$1", patientId)
+	err := row.Scan(&patientInfo.PatientTc, &patientInfo.PatientName, &patientInfo.PatientSurname, &patientInfo.PatientBd, &patientInfo.PatientR1Name, &patientInfo.PatientR1Num, &patientInfo.PatientR2Name, &patientInfo.PatientR2Num, &patientInfo.PatientGender, &patientInfo.PatientAddress)
+	if err != nil {
+		return patientInfo
+	}
+	return patientInfo
 }
