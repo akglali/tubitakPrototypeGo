@@ -1,11 +1,14 @@
 package adminPanel
 
+import "time"
+
 type allPatientInfo struct {
 	PatientTc      string
 	PatientName    string
 	PatientSurname string
 	PatientGender  string
-	PatientAddress string
+	PatientAddress *string
+	LastSeenTime   *time.Time
 }
 type allSinglePatientInfo struct {
 	PatientTc      string

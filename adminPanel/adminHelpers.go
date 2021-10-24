@@ -36,9 +36,10 @@ func getAllPatientRows() ([]allPatientInfo, error) {
 	var patientsInfo []allPatientInfo
 	for rows.Next() {
 		var patient allPatientInfo
-		if err := rows.Scan(&patient.PatientTc, &patient.PatientName, &patient.PatientSurname, &patient.PatientGender, &patient.PatientAddress); err != nil {
+		if err := rows.Scan(&patient.PatientTc, &patient.PatientName, &patient.PatientSurname, &patient.PatientGender, &patient.PatientAddress, &patient.LastSeenTime); err != nil {
 			return patientsInfo, err
 		}
+
 		patientsInfo = append(patientsInfo, patient)
 	}
 	return patientsInfo, err

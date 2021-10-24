@@ -61,7 +61,9 @@ func getAllBeaconInfo(c *gin.Context) {
 func getAllPatientInfo(c *gin.Context) {
 	allPatientsInfoRows, err := getAllPatientRows()
 	if err != nil {
+		fmt.Println(err.Error())
 		helpers.MyAbort(c, "Could not reach patients info")
+		return
 	}
 	c.JSON(200, allPatientsInfoRows)
 }
