@@ -8,13 +8,13 @@ import (
 )
 
 func SetupAdminPanel(rg *gin.RouterGroup) {
-	rg.GET("/all_beacons_admin", getAllBeaconInfo)
-	rg.GET("/all_patients_admin", getAllPatientInfo)
+	rg.GET("/all_beacons_admin/:page", getAllBeaconInfo)
+	rg.GET("/all_patients_admin/:page", getAllPatientInfo)
 	rg.POST("/add_admin", signup)
 	rg.POST("/login_admin", login)
-	rg.GET("/get_info_patient/:patientId", getSinglePatientTrackingInfo)
+	rg.GET("/get_info_patient/:patientId/:page", getSinglePatientTrackingInfo)
 	rg.GET("/get_single_patient/:singlePatientId", getSinglePatientInfo)
-	rg.GET("/get_info_beacon/:beaconId", getSingleBeaconTrackingInfo)
+	rg.GET("/get_info_beacon/:beaconId/:page", getSingleBeaconTrackingInfo)
 
 }
 
@@ -32,7 +32,7 @@ func login(c *gin.Context) {
 		c.JSON(200, "Hos geldin admin "+body.Username)
 		return
 	} else {
-		helpers.MyAbort(c, "Password and username is wrong")
+		helpers.MyAbort(c, "Password or username is wrong")
 		return
 	}
 }
@@ -55,17 +55,16 @@ func getAllBeaconInfo(c *gin.Context) {
 	if err != nil {
 		helpers.MyAbort(c, "Could not reach beacons info")
 	}
-	c.JSON(200, allBeaconsInfoRows)
+	pagination(c, allBeaconsInfoRows)
 }
 
 func getAllPatientInfo(c *gin.Context) {
 	allPatientsInfoRows, err := getAllPatientRows()
 	if err != nil {
-		fmt.Println(err.Error())
 		helpers.MyAbort(c, "Could not reach patients info")
 		return
 	}
-	c.JSON(200, allPatientsInfoRows)
+	pagination(c, allPatientsInfoRows)
 }
 
 func getSinglePatientTrackingInfo(c *gin.Context) {
@@ -75,7 +74,7 @@ func getSinglePatientTrackingInfo(c *gin.Context) {
 		helpers.MyAbort(c, "Something went wrong for "+patientId)
 		return
 	}
-	c.JSON(200, allPatientTrackInfo)
+	pagination(c, allPatientTrackInfo)
 
 }
 
@@ -87,12 +86,14 @@ func getSingleBeaconTrackingInfo(c *gin.Context) {
 		helpers.MyAbort(c, "Something went wrong for "+beaconId)
 		return
 	}
-	c.JSON(200, allBeaconTrackingInfo)
+	pagination(c, allBeaconTrackingInfo)
+
 }
 
 func getSinglePatientInfo(c *gin.Context) {
 	patientId := c.Param("singlePatientId")
 	row := getSinglePatientInfoRow(patientId)
+
 	c.JSON(200, row)
 
 }

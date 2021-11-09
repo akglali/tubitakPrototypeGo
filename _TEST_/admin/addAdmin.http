@@ -2,6 +2,6 @@ POST http://localhost:8000/admin/add_admin
 Content-Type: application/json
 
 {
-  "username":"deneme3",
+  "username":"deneme34",
   "admin_password": "deneme"
 }

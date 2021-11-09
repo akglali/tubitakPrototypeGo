@@ -3,6 +3,8 @@ package adminPanel
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"reflect"
+	"strconv"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
 	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
@@ -111,4 +113,38 @@ func getSinglePatientInfoRow(patientId string) allSinglePatientInfo {
 		return patientInfo
 	}
 	return patientInfo
+}
+
+const itemsPerPage = 3
+
+func pagination(c *gin.Context, st interface{}) {
+	var allRows []interface{}
+	switch reflect.TypeOf(st).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(st)
+		for i := 0; i < s.Len(); i++ {
+			allRows = append(allRows, s.Index(i).Interface())
+
+		}
+	}
+	page, err := strconv.Atoi(c.Param("page"))
+	if err != nil {
+		helpers.MyAbort(c, "Data could not reached")
+		return
+	}
+	start := ((page) - 1) * itemsPerPage
+	stop := start + itemsPerPage
+	if start > len(allRows) {
+		c.JSON(404, "No More Post")
+		return
+	}
+	if stop > len(allRows) {
+		stop = len(allRows)
+	}
+
+	if err != nil {
+		helpers.MyAbort(c, "We can't get all posts!")
+		return
+	}
+	c.JSON(200, allRows[start:stop])
 }
