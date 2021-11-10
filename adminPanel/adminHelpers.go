@@ -3,8 +3,6 @@ package adminPanel
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"reflect"
-	"strconv"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
 	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
@@ -29,9 +27,9 @@ func loginStructFunc(c *gin.Context) (loginStruct, error) {
 }
 
 //Getting all patients information
-func getAllPatientRows() ([]allPatientInfo, error) {
+func getAllPatientRows(offSet int) ([]allPatientInfo, error) {
 
-	rows, err := adminPanelDatabase.GetAllPatientDb()
+	rows, err := adminPanelDatabase.GetAllPatientDb(offSet)
 	if err != nil {
 		return nil, err
 	}
@@ -49,9 +47,9 @@ func getAllPatientRows() ([]allPatientInfo, error) {
 }
 
 //getting single patient tracking information to be able to see their path.
-func getSinglePatientRows(patientId string) ([]singlePatientTrackingStruct, error) {
+func getSinglePatientRows(patientId string, offSet int) ([]singlePatientTrackingStruct, error) {
 
-	rows, err := adminPanelDatabase.GetSinglePatientRowsDb(patientId)
+	rows, err := adminPanelDatabase.GetSinglePatientRowsDb(patientId, offSet)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +65,8 @@ func getSinglePatientRows(patientId string) ([]singlePatientTrackingStruct, erro
 }
 
 //getting single beacon tracking info. So admin can see all patients that are tracked by the beacon
-func getSingleBeaconId(beaconId string) ([]singleBeaconTrackingStruct, error) {
-	rows, err := adminPanelDatabase.GetSingleBeaconIdDb(beaconId)
+func getSingleBeaconId(beaconId string, offSet int) ([]singleBeaconTrackingStruct, error) {
+	rows, err := adminPanelDatabase.GetSingleBeaconIdDb(beaconId, offSet)
 	if err != nil {
 		return nil, err
 	}
@@ -85,8 +83,8 @@ func getSingleBeaconId(beaconId string) ([]singleBeaconTrackingStruct, error) {
 }
 
 // getting all beacon list
-func getAllBeaconRows() ([]allBeaconInfo, error) {
-	rows, err := adminPanelDatabase.GetAllBeaconRowsDb()
+func getAllBeaconRows(offSet int) ([]allBeaconInfo, error) {
+	rows, err := adminPanelDatabase.GetAllBeaconRowsDb(offSet)
 	if err != nil {
 		return nil, err
 	}
@@ -113,38 +111,4 @@ func getSinglePatientInfoRow(patientId string) allSinglePatientInfo {
 		return patientInfo
 	}
 	return patientInfo
-}
-
-const itemsPerPage = 3
-
-func pagination(c *gin.Context, st interface{}) {
-	var allRows []interface{}
-	switch reflect.TypeOf(st).Kind() {
-	case reflect.Slice:
-		s := reflect.ValueOf(st)
-		for i := 0; i < s.Len(); i++ {
-			allRows = append(allRows, s.Index(i).Interface())
-
-		}
-	}
-	page, err := strconv.Atoi(c.Param("page"))
-	if err != nil {
-		helpers.MyAbort(c, "Data could not reached")
-		return
-	}
-	start := ((page) - 1) * itemsPerPage
-	stop := start + itemsPerPage
-	if start > len(allRows) {
-		c.JSON(404, "No More Post")
-		return
-	}
-	if stop > len(allRows) {
-		stop = len(allRows)
-	}
-
-	if err != nil {
-		helpers.MyAbort(c, "We can't get all posts!")
-		return
-	}
-	c.JSON(200, allRows[start:stop])
 }

@@ -20,24 +20,24 @@ func SignUpDb(username, password string, savedUsername *string) error {
 
 //Patient Calls
 
-func GetAllPatientDb() (*sql.Rows, error) {
-	rows, err := database.Db.Query("select distinct on (patient_name) patient_tc, patient_name, patient_surname, patient_gender, bdt.location,ptit.seen_time from patient_table left join patient_tracker_info_table ptit on patient_table.patient_id = ptit.patient_id left join beacon_devices_table bdt  on bdt.device_id=ptit.beacon_id order by patient_name,ptit.seen_time desc nulls last , 1;")
+func GetAllPatientDb(offSet int) (*sql.Rows, error) {
+	rows, err := database.Db.Query("select distinct on (patient_name) patient_tc, patient_name, patient_surname, patient_gender, bdt.location,ptit.seen_time from patient_table left join patient_tracker_info_table ptit on patient_table.patient_id = ptit.patient_id left join beacon_devices_table bdt  on bdt.device_id=ptit.beacon_id order by patient_name,ptit.seen_time desc nulls last, 1 LIMIT 10 OFFSET $1", offSet)
 	return rows, err
 }
 
-func GetSinglePatientRowsDb(patientId string) (*sql.Rows, error) {
-	rows, err := database.Db.Query("select bdt.device_id,location,distance,seen_time,bdt.google_map_link from patient_tracker_info_table  left join beacon_devices_table as bdt on patient_tracker_info_table.beacon_id = bdt.device_id left join patient_table as pt on pt.patient_id=patient_tracker_info_table.patient_id where patient_tc=$1  order by seen_time desc", patientId)
+func GetSinglePatientRowsDb(patientId string, offSet int) (*sql.Rows, error) {
+	rows, err := database.Db.Query("select bdt.device_id,location,distance,seen_time,bdt.google_map_link from patient_tracker_info_table  left join beacon_devices_table as bdt on patient_tracker_info_table.beacon_id = bdt.device_id left join patient_table as pt on pt.patient_id=patient_tracker_info_table.patient_id where patient_tc=$1  order by seen_time desc LIMIT 10 OFFSET $2", patientId, offSet)
 	return rows, err
 }
 
 //Devices Calls
 
-func GetAllBeaconRowsDb() (*sql.Rows, error) {
-	rows, err := database.Db.Query("select * from beacon_devices_table")
+func GetAllBeaconRowsDb(pageOffset int) (*sql.Rows, error) {
+	rows, err := database.Db.Query("select * from beacon_devices_table LIMIT 10 OFFSET $1", pageOffset)
 	return rows, err
 }
 
-func GetSingleBeaconIdDb(beaconId string) (*sql.Rows, error) {
-	rows, err := database.Db.Query("select pt.patient_tc,seen_time,distance,bdt.location,bdt.google_map_link,bdt.minor,bdt.major from patient_tracker_info_table left join patient_table pt on patient_tracker_info_table.patient_id = pt.patient_id left join beacon_devices_table as bdt  on  bdt.device_id=patient_tracker_info_table.beacon_id where beacon_id=$1 order by seen_time", beaconId)
+func GetSingleBeaconIdDb(beaconId string, offSet int) (*sql.Rows, error) {
+	rows, err := database.Db.Query("select pt.patient_tc,seen_time,distance,bdt.location,bdt.google_map_link,bdt.minor,bdt.major from patient_tracker_info_table left join patient_table pt on patient_tracker_info_table.patient_id = pt.patient_id left join beacon_devices_table as bdt  on  bdt.device_id=patient_tracker_info_table.beacon_id where beacon_id=$1 order by seen_time LIMIT 10 OFFSET $2", beaconId, offSet)
 	return rows, err
 }

@@ -3,6 +3,7 @@ package adminPanel
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
 	"tubitakPrototypeGo/helpers"
 )
@@ -18,6 +19,8 @@ func SetupAdminPanel(rg *gin.RouterGroup) {
 
 }
 
+const itemsPerPage = 10
+
 func login(c *gin.Context) {
 	body, err := loginStructFunc(c)
 	var password string
@@ -29,7 +32,7 @@ func login(c *gin.Context) {
 	passwordTrue := CheckPassword(body.Password, password)
 
 	if passwordTrue {
-		c.JSON(200, "Hos geldin admin "+body.Username)
+		c.JSON(200, "Welcome admin "+body.Username)
 		return
 	} else {
 		helpers.MyAbort(c, "Password or username is wrong")
@@ -51,42 +54,63 @@ func signup(c *gin.Context) {
 }
 
 func getAllBeaconInfo(c *gin.Context) {
-	allBeaconsInfoRows, err := getAllBeaconRows()
+	offSet, err := strconv.Atoi(c.Param("page"))
 	if err != nil {
-		helpers.MyAbort(c, "Could not reach beacons info")
+		helpers.MyAbort(c, "Page Number Format is wrong")
+		return
 	}
-	pagination(c, allBeaconsInfoRows)
+	allBeaconsInfoRows, err := getAllBeaconRows(offSet * itemsPerPage)
+	if err != nil {
+		fmt.Println(err)
+		helpers.MyAbort(c, "Could not reach beacons info")
+		return
+	}
+	c.JSON(200, allBeaconsInfoRows)
 }
 
 func getAllPatientInfo(c *gin.Context) {
-	allPatientsInfoRows, err := getAllPatientRows()
+	offSet, err := strconv.Atoi(c.Param("page"))
+	if err != nil {
+		helpers.MyAbort(c, "Page Number Format is wrong")
+		return
+	}
+	allPatientsInfoRows, err := getAllPatientRows(offSet * itemsPerPage)
 	if err != nil {
 		helpers.MyAbort(c, "Could not reach patients info")
 		return
 	}
-	pagination(c, allPatientsInfoRows)
+	c.JSON(200, allPatientsInfoRows)
 }
 
 func getSinglePatientTrackingInfo(c *gin.Context) {
+	offSet, err := strconv.Atoi(c.Param("page"))
+	if err != nil {
+		helpers.MyAbort(c, "Page Number Format is wrong")
+		return
+	}
 	patientId := c.Param("patientId")
-	allPatientTrackInfo, err := getSinglePatientRows(patientId)
+	allPatientTrackInfo, err := getSinglePatientRows(patientId, offSet*itemsPerPage)
 	if err != nil {
 		helpers.MyAbort(c, "Something went wrong for "+patientId)
 		return
 	}
-	pagination(c, allPatientTrackInfo)
+	c.JSON(200, allPatientTrackInfo)
 
 }
 
 func getSingleBeaconTrackingInfo(c *gin.Context) {
-	beaconId := c.Param("beaconId")
-	allBeaconTrackingInfo, err := getSingleBeaconId(beaconId)
+	offSet, err := strconv.Atoi(c.Param("page"))
 	if err != nil {
-		fmt.Println(err.Error())
+		helpers.MyAbort(c, "Page Number Format is wrong")
+		return
+	}
+	beaconId := c.Param("beaconId")
+	allBeaconTrackingInfo, err := getSingleBeaconId(beaconId, offSet*itemsPerPage)
+	if err != nil {
 		helpers.MyAbort(c, "Something went wrong for "+beaconId)
 		return
 	}
-	pagination(c, allBeaconTrackingInfo)
+	c.JSON(200, allBeaconTrackingInfo)
 
 }
 
