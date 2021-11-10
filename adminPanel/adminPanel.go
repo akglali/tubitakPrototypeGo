@@ -1,10 +1,14 @@
 package adminPanel
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/barisesen/tcverify"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"time"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
+	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
 )
 
@@ -16,6 +20,7 @@ func SetupAdminPanel(rg *gin.RouterGroup) {
 	rg.GET("/get_info_patient/:patientId/:page", getSinglePatientTrackingInfo)
 	rg.GET("/get_single_patient/:singlePatientId", getSinglePatientInfo)
 	rg.GET("/get_info_beacon/:beaconId/:page", getSingleBeaconTrackingInfo)
+	rg.POST("/add_relative", sendPassword)
 
 }
 
@@ -119,5 +124,43 @@ func getSinglePatientInfo(c *gin.Context) {
 	row := getSinglePatientInfoRow(patientId)
 
 	c.JSON(200, row)
+}
 
+func sendPassword(c *gin.Context) {
+	body := emailStruct{}
+	data, err := c.GetRawData()
+	if err != nil {
+		helpers.MyAbort(c, "Input format is wrong")
+		return
+	}
+	err = json.Unmarshal(data, &body)
+	if !helpers.EmailIsValid(body.Email) {
+		helpers.MyAbort(c, "Check your email type!!!")
+		return
+	}
+	//check if tc is valid or not
+	resp, err := tcverify.Validate(body.PatientTc)
+	if err != nil || !resp {
+		helpers.MyAbort(c, "Tc is not valid!")
+		return
+	}
+
+	currentTime := time.Now().Format("2006-01-02 3:4:5 PM")
+	password, _ := helpers.GenerateOTP(6)
+	//email is got by user
+	helpers.SendEmail(password, body.Email)
+	token := helpers.TokenGenerator()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, err = database.Db.Query("insert into patient_relatives_table(email, password, send_date, token,patient_tc) values ($1,$2,$3,$4,$5)", body.Email, password, currentTime, token, body.PatientTc)
+	if err != nil {
+		helpers.MyAbort(c, "Relative  is already exist.")
+		return
+	}
+
+	//sent the current time as well to save on local storage or phone storage.
+	//You can save the time on ur database to check it
+	c.JSON(200, "Code is successfully sent to "+body.Email)
 }

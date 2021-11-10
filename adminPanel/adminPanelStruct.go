@@ -52,3 +52,8 @@ type singleBeaconTrackingStruct struct {
 	Major     string
 	Minor     string
 }
+
+type emailStruct struct {
+	Email     string
+	PatientTc string
+}

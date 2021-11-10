@@ -7,6 +7,7 @@ import (
 	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/login"
 	patientTracker2 "tubitakPrototypeGo/patientTracker"
+	"tubitakPrototypeGo/relative"
 )
 
 func main() {
@@ -31,6 +32,9 @@ func main() {
 
 	admin := router.Group("/admin")
 	adminPanel.SetupAdminPanel(admin)
+
+	relatives := router.Group("/relative")
+	relative.SetupPatientRelative(relatives)
 
 	err := router.Run(":8000")
 	if err != nil {
