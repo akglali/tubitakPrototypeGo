@@ -105,8 +105,8 @@ func getAllBeaconRows(offSet int) ([]allBeaconInfo, error) {
 func getSinglePatientInfoRow(patientId string) allSinglePatientInfo {
 
 	var patientInfo allSinglePatientInfo
-	row := database.Db.QueryRow("select patient_tc,patient_name,patient_surname,patient_bd,patient_relative_name2,patient_relative_phone_number,patient_relative_name,patient_relative_phone_number2,patient_gender,patient_address from patient_table where patient_tc=$1", patientId)
-	err := row.Scan(&patientInfo.PatientTc, &patientInfo.PatientName, &patientInfo.PatientSurname, &patientInfo.PatientBd, &patientInfo.PatientR1Name, &patientInfo.PatientR1Num, &patientInfo.PatientR2Name, &patientInfo.PatientR2Num, &patientInfo.PatientGender, &patientInfo.PatientAddress)
+	row := database.Db.QueryRow("select patient_tc,patient_name,patient_surname,patient_bd,patient_relative_name,patient_relative_surname,patient_relative_phone_number,patient_relative_name2,patient_relative_surname2,patient_relative_phone_number2,patient_gender,patient_address from patient_table where patient_tc=$1", patientId)
+	err := row.Scan(&patientInfo.PatientTc, &patientInfo.PatientName, &patientInfo.PatientSurname, &patientInfo.PatientBd, &patientInfo.PatientR1Name, &patientInfo.PatientR1Surname, &patientInfo.PatientR1Num, &patientInfo.PatientR2Name, &patientInfo.PatientR2Surname, &patientInfo.PatientR2Num, &patientInfo.PatientGender, &patientInfo.PatientAddress)
 	if err != nil {
 		return patientInfo
 	}

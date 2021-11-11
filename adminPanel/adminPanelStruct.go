@@ -11,16 +11,18 @@ type allPatientInfo struct {
 	LastSeenTime   *time.Time
 }
 type allSinglePatientInfo struct {
-	PatientTc      string
-	PatientName    string
-	PatientSurname string
-	PatientBd      string
-	PatientR1Name  string
-	PatientR1Num   string
-	PatientR2Name  string
-	PatientR2Num   string
-	PatientGender  string
-	PatientAddress string
+	PatientTc        string
+	PatientName      string
+	PatientSurname   string
+	PatientBd        string
+	PatientR1Name    string
+	PatientR1Surname string
+	PatientR1Num     string
+	PatientR2Name    string
+	PatientR2Surname string
+	PatientR2Num     string
+	PatientGender    string
+	PatientAddress   string
 }
 
 type loginStruct struct {
