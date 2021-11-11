@@ -5,7 +5,29 @@ type signRelative struct {
 	Password string
 }
 
-type changePassword struct {
+type changePasswordSt struct {
 	OldPassword string
 	NewPassword string
+}
+
+type addPatientSt struct {
+	PatientBd      string
+	PRName         string
+	PRNum          string
+	PRName2        string
+	PRNum2         string
+	PatientGender  string
+	PatientAddress string
+	PatientTc      string
+	PatientName    string
+	PatientSurname string
+	PRSurname      string
+	PRSurname2     string
+}
+
+type singlePatient struct {
+	Location      string
+	Distance      string
+	SeenTime      string
+	GoogleMapLink string
 }
