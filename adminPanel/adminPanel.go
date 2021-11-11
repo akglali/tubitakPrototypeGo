@@ -34,7 +34,7 @@ func login(c *gin.Context) {
 		helpers.MyAbort(c, "Admin could not be found")
 		return
 	}
-	passwordTrue := CheckPassword(body.Password, password)
+	passwordTrue := helpers.Checkpassword(body.Password, password)
 
 	if passwordTrue {
 		c.JSON(200, "Welcome admin "+body.Username)
@@ -47,7 +47,7 @@ func login(c *gin.Context) {
 
 func signup(c *gin.Context) {
 	body, err := loginStructFunc(c)
-	password, _ := HashPassword(body.Password)
+	password, _ := helpers.Hashpassword(body.Password)
 	var username string
 	err = adminPanelDatabase.SignUpDb(body.Username, password, &username)
 	if err != nil {
@@ -150,11 +150,13 @@ func sendPassword(c *gin.Context) {
 	//email is got by user
 	helpers.SendEmail(password, body.Email)
 	token := helpers.TokenGenerator()
+
+	hassPassword, err := helpers.Hashpassword(password)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	_, err = database.Db.Query("insert into patient_relatives_table(email, password, send_date, token,patient_tc) values ($1,$2,$3,$4,$5)", body.Email, password, currentTime, token, body.PatientTc)
+	_, err = database.Db.Query("insert into patient_relatives_table(email, password, send_date, token,patient_tc) values ($1,$2,$3,$4,$5)", body.Email, hassPassword, currentTime, token, body.PatientTc)
 	if err != nil {
 		helpers.MyAbort(c, "Relative  is already exist.")
 		return

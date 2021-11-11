@@ -38,13 +38,19 @@ func signPatient(c *gin.Context) {
 		helpers.MyAbort(c, "Girmis oldugunuz mail adresi gecerli degildir.")
 		return
 	}
-	var token string
-	err = database.Db.QueryRow("select token from patient_relatives_table where email=$1 and password=$2", body.Email, body.Password).Scan(&token)
-	if err != nil {
+	var token, password, patientTc string
+	err = database.Db.QueryRow("select token,password,patient_tc from patient_relatives_table where email=$1 ", body.Email).Scan(&token, &password, &patientTc)
+	if !helpers.Checkpassword(body.Password, password) {
 		helpers.MyAbort(c, "Check Your password.")
 		return
-	} else {
-		c.JSON(200, token)
 	}
+	c.JSON(200, gin.H{
+		"token":     token,
+		"patientTc": patientTc,
+	})
+
+}
+
+func fillPatientForm(c *gin.Context) {
 
 }
