@@ -9,3 +9,58 @@ func SinglePatient(patientId string, offSet int) (*sql.Rows, error) {
 	rows, err := database.Db.Query("select location,distance,seen_time,bdt.google_map_link from patient_tracker_info_table  left join beacon_devices_table as bdt on patient_tracker_info_table.beacon_id = bdt.device_id left join patient_table as pt on pt.patient_id=patient_tracker_info_table.patient_id where patient_tc=$1  order by seen_time desc LIMIT 5 OFFSET $2", patientId, offSet)
 	return rows, err
 }
+
+//SignPatient DB
+
+func CheckPasswordDb(email string) (string, string, string) {
+	var token, password, patientTc string
+	err := database.Db.QueryRow("select token,password,patient_tc from patient_relatives_table where email=$1 ", email).Scan(&token, &password, &patientTc)
+	if err != nil {
+		return "", "", ""
+	}
+	return token, password, patientTc
+}
+
+//changePassword Db
+
+func GetPassword(token string) string {
+	var password string
+	err := database.Db.QueryRow("select password from patient_relatives_table where token=$1", token).Scan(&password)
+	if err != nil {
+		return ""
+	}
+	return password
+}
+
+func ChangePassword(token, newPassword string) bool {
+	var checkChange bool
+	err := database.Db.QueryRow("SELECT  * from changepassword($1,$2,$3)", token, true, newPassword).Scan(&checkChange)
+	if err != nil {
+		return false
+	}
+	return true
+
+}
+
+//add Patient DB
+
+func AddPatient(PatientBd, PRName, PRNum, PRName2, PRNum2, PatientGender, PatientAddress, PatientTc, PatientName, PatientSurname, PRSurname, PRSurname2 string) error {
+	_, err := database.Db.Query("insert into patient_table(patient_bd, patient_relative_name, patient_relative_phone_number, patient_relative_name2, patient_relative_phone_number2, patient_gender, patient_address, patient_tc, patient_name, patient_surname, patient_relative_surname, patient_relative_surname2) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)",
+		PatientBd, PRName, PRNum, PRName2, PRNum2, PatientGender, PatientAddress, PatientTc, PatientName, PatientSurname, PRSurname, PRSurname2)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+//Common Functions
+
+func EmailExistDB(value string) bool {
+	var emailExist bool
+	err := database.Db.QueryRow("select exists(select 1 from patient_relatives_table where email=$1)", value).Scan(&emailExist)
+	if err != nil {
+		return false
+	}
+	return emailExist
+}

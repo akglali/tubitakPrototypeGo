@@ -2,11 +2,10 @@ package relative
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
-	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
+	"tubitakPrototypeGo/relative/relativeDatabase"
 )
 
 func SetupPatientRelative(rg *gin.RouterGroup) {
@@ -33,18 +32,13 @@ func signPatient(c *gin.Context) {
 		helpers.MyAbort(c, "Check your email type!!!")
 		return
 	}
-	var emailExist bool
-	err = database.Db.QueryRow("select exists(select 1 from patient_relatives_table where email=$1)", body.Email).Scan(&emailExist)
-	if err != nil {
-		helpers.MyAbort(c, "Something went wrong check the server.")
-		return
-	}
+
+	emailExist := relativeDatabase.EmailExistDB(body.Email)
 	if !emailExist {
 		helpers.MyAbort(c, "Girmis oldugunuz mail adresi gecerli degildir.")
 		return
 	}
-	var token, password, patientTc string
-	err = database.Db.QueryRow("select token,password,patient_tc from patient_relatives_table where email=$1 ", body.Email).Scan(&token, &password, &patientTc)
+	token, password, patientTc := relativeDatabase.CheckPasswordDb(body.Email)
 	if !helpers.Checkpassword(body.Password, password) {
 		helpers.MyAbort(c, "Check Your password.")
 		return
@@ -69,16 +63,15 @@ func changePassword(c *gin.Context) {
 		return
 	}
 	token := c.GetHeader("token")
-	var password string
-	err = database.Db.QueryRow("select password from patient_relatives_table where token=$1", token).Scan(&password)
-	if err != nil || !helpers.Checkpassword(body.OldPassword, password) {
+
+	password := relativeDatabase.GetPassword(token)
+	if !helpers.Checkpassword(body.OldPassword, password) {
 		helpers.MyAbort(c, "Eski Parolanin dogru oldugundan emin olun. ")
 		return
 	} else {
-		var checkChange bool
 		newPassword, _ := helpers.Hashpassword(body.NewPassword)
-		err = database.Db.QueryRow("SELECT  * from changepassword($1,$2,$3)", token, true, newPassword).Scan(&checkChange)
-		if err != nil || !checkChange {
+		checkChange := relativeDatabase.ChangePassword(token, newPassword)
+		if !checkChange {
 			helpers.MyAbort(c, "Eski Parolanin dogru oldugundan emin olun. ")
 			return
 		}
@@ -101,17 +94,15 @@ func addPatient(c *gin.Context) {
 		return
 	}
 	token := c.GetHeader("token")
-	var checkTokenExist bool
-	err = database.Db.QueryRow("select exists(select 1 from patient_relatives_table where token=$1)", token).Scan(&checkTokenExist)
+	checkTokenExist := relativeDatabase.EmailExistDB(token)
 	if !checkTokenExist {
 		helpers.MyAbort(c, "Birseyler hatali gitti lutfen yeniden baglanin!")
 		return
 	}
 
-	_, err = database.Db.Query("insert into patient_table(patient_bd, patient_relative_name, patient_relative_phone_number, patient_relative_name2, patient_relative_phone_number2, patient_gender, patient_address, patient_tc, patient_name, patient_surname, patient_relative_surname, patient_relative_surname2) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)",
-		body.PatientBd, body.PRName, body.PRNum, body.PRName2, body.PRNum2, body.PatientGender, body.PatientAddress, body.PatientTc, body.PatientName, body.PatientSurname, body.PRSurname, body.PRSurname2)
+	err = relativeDatabase.AddPatient(body.PatientBd, body.PRName, body.PRNum, body.PRName2, body.PRNum2, body.PatientGender, body.PatientAddress, body.PatientTc, body.PatientName, body.PatientSurname, body.PRSurname, body.PRSurname2)
 	if err != nil {
-		fmt.Println(err)
+		helpers.MyAbort(c, "Hasta eklerken birseyler hatali gitti lutfen yeniden baglanin!")
 		return
 	}
 	c.JSON(200, "Patient Is Added")
@@ -122,8 +113,7 @@ const itemsPerPage = 5
 
 func getPatientTrackingInfo(c *gin.Context) {
 	token := c.GetHeader("token")
-	var checkTokenExist bool
-	err := database.Db.QueryRow("select exists(select 1 from patient_relatives_table where token=$1)", token).Scan(&checkTokenExist)
+	checkTokenExist := relativeDatabase.EmailExistDB(token)
 	if !checkTokenExist {
 		helpers.MyAbort(c, "Birseyler hatali gitti lutfen yeniden baglanin!")
 		return

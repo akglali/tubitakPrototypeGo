@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 	"tubitakPrototypeGo/adminPanel/adminPanelDatabase"
-	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
 )
 
@@ -156,7 +155,7 @@ func sendPassword(c *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-	_, err = database.Db.Query("insert into patient_relatives_table(email, password, send_date, token,patient_tc) values ($1,$2,$3,$4,$5)", body.Email, hassPassword, currentTime, token, body.PatientTc)
+	err = adminPanelDatabase.EmailSave(body.Email, hassPassword, currentTime, token, body.PatientTc)
 	if err != nil {
 		helpers.MyAbort(c, "Relative  is already exist.")
 		return

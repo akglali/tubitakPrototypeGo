@@ -30,8 +30,12 @@ func GetSinglePatientRowsDb(patientId string, offSet int) (*sql.Rows, error) {
 	return rows, err
 }
 
-//Devices Calls
+func GetSinglePatientAllInfo(patientId string) *sql.Row {
+	rows := database.Db.QueryRow("select patient_tc,patient_name,patient_surname,patient_bd,patient_relative_name,patient_relative_surname,patient_relative_phone_number,patient_relative_name2,patient_relative_surname2,patient_relative_phone_number2,patient_gender,patient_address from patient_table where patient_tc=$1", patientId)
+	return rows
+}
 
+//Devices Calls
 func GetAllBeaconRowsDb(pageOffset int) (*sql.Rows, error) {
 	rows, err := database.Db.Query("select * from beacon_devices_table LIMIT 10 OFFSET $1", pageOffset)
 	return rows, err
@@ -40,4 +44,15 @@ func GetAllBeaconRowsDb(pageOffset int) (*sql.Rows, error) {
 func GetSingleBeaconIdDb(beaconId string, offSet int) (*sql.Rows, error) {
 	rows, err := database.Db.Query("select pt.patient_tc,seen_time,distance,bdt.location,bdt.google_map_link,bdt.minor,bdt.major from patient_tracker_info_table left join patient_table pt on patient_tracker_info_table.patient_id = pt.patient_id left join beacon_devices_table as bdt  on  bdt.device_id=patient_tracker_info_table.beacon_id where beacon_id=$1 order by seen_time LIMIT 10 OFFSET $2", beaconId, offSet)
 	return rows, err
+}
+
+//email save
+
+func EmailSave(email, password, currentTime, token, patientTc string) error {
+	_, err := database.Db.Query("insert into patient_relatives_table(email, password, send_date, token,patient_tc) values ($1,$2,$3,$4,$5)", email, password, currentTime, token, patientTc)
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
