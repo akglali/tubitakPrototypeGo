@@ -12,13 +12,15 @@ func SinglePatient(patientId string, offSet int) (*sql.Rows, error) {
 
 //SignPatient DB
 
-func CheckPasswordDb(email string) (string, string, string) {
+func CheckPasswordDb(email string) (string, string, string, bool) {
 	var token, password, patientTc string
-	err := database.Db.QueryRow("select token,password,patient_tc from patient_relatives_table where email=$1 ", email).Scan(&token, &password, &patientTc)
+	var hasPatient bool
+	err := database.Db.QueryRow("select token,password,patient_tc,has_patient from patient_relatives_table where email=$1 ", email).Scan(&token, &password, &patientTc, &hasPatient)
 	if err != nil {
-		return "", "", ""
+		return "", "", "", false
 	}
-	return token, password, patientTc
+
+	return token, password, patientTc, hasPatient
 }
 
 //changePassword Db

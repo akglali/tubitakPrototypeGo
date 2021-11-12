@@ -1,3 +1,183 @@
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "1234567"
+}
+
+<> 2021-11-12T205911.200.json
+
+###
+
+POST http://localhost:8000/relative/add_patient
+Token: d1b4f3355d6810fd2b7241ef95b893fd467269204e6f762031322032303a33393a33302032303231
+Content-Type: application/json
+
+{
+  "PatientBd": "1998-01-04",
+  "PRName": "Derman",
+  "PRNum": "05378270553",
+  "PRName2": "Dilek",
+  "PRNum2": "05318874348",
+  "PatientGender": "M",
+  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
+  "PatientTc": "10952336010",
+  "PatientName": "Ali",
+  "PatientSurname": "Akgol",
+  "PRSurname": "Keskinkilinc",
+  "PRSurname2": "Yayman"
+}
+
+<> 2021-11-12T205859.200.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "1234567"
+}
+
+<> 2021-11-12T205635.200.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "1234567"
+}
+
+<> 2021-11-12T205552.400.json
+
+###
+
+POST http://localhost:8000/relative/change_password
+Token: d1b4f3355d6810fd2b7241ef95b893fd467269204e6f762031322032303a33393a33302032303231
+Content-Type: application/json
+
+{
+  "oldpassword":"123456",
+  "newpassword": "1234567"
+}
+
+<> 2021-11-12T205525.200.json
+
+###
+
+POST http://localhost:8000/relative/change_password
+Token: d1b4f3355d6810fd2b7241ef95b893fd467269204e6f762031322032303a33393a33302032303231
+Content-Type: application/json
+
+{
+  "oldpassword":"594883",
+  "newpassword": "123456"
+}
+
+<> 2021-11-12T205510.400.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "123456"
+}
+
+<> 2021-11-12T205433.400.json
+
+###
+
+POST http://localhost:8000/relative/change_password
+Token: d1b4f3355d6810fd2b7241ef95b893fd467269204e6f762031322032303a33393a33302032303231
+Content-Type: application/json
+
+{
+  "oldpassword":"594883",
+  "newpassword": "123456"
+}
+
+<> 2021-11-12T205427.200.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "594883"
+}
+
+<> 2021-11-12T205413.400.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "594883"
+}
+
+<> 2021-11-12T205347.400.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "594883"
+}
+
+<> 2021-11-12T205340.400.json
+
+###
+
+POST http://localhost:8000/relative/sign_in
+Content-Type: application/json
+
+{
+  "email":"akgol97_@hotmail.com",
+  "password": "594883"
+}
+
+<> 2021-11-12T203948.200.json
+
+###
+
+POST http://localhost:8000/admin/add_relative
+Content-Type: application/json
+
+{
+  "email": "akgol97_@hotmail.com",
+  "patienttc": "10952336010"
+}
+
+<> 2021-11-12T203931.200.json
+
+###
+
+POST http://localhost:8000/admin/add_relative
+Content-Type: application/json
+
+{
+  "email": "akgol97_@hotmail.com",
+  "patienttc": "10952336010"
+}
+
+###
+
 GET http://localhost:8000/relative/last_location/10952336010
 Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
 
@@ -238,232 +418,6 @@ GET http://localhost:8000/relative/last_location/10952336010
 Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
 
 <> 2021-11-12T195010.400.json
-
-###
-
-GET http://localhost:8000/relative/last_location/10952336010
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-
-<> 2021-11-12T194815.400.json
-
-###
-
-GET http://localhost:8000/relative/last_location/10952336010
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-
-<> 2021-11-12T194531.400.json
-
-###
-
-GET http://localhost:8000/relative/last_location/10952336010
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-
-<> 2021-11-12T194427.400.json
-
-###
-
-GET http://localhost:8000/relative/last_location/10952336010
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-
-<> 2021-11-12T194317.400.json
-
-###
-
-GET http://localhost:8000/relative/last_location/10952336010
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-
-<> 2021-11-12T194147.400.json
-
-###
-
-GET http://localhost:8000/relative/last_location/10952336010
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-
-<> 2021-11-12T194044.400.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T191436.400.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T191029.200.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T191027.200.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T191025.200.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T190732.400.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T190634.400.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T190617.400.json
-
-###
-
-POST http://localhost:8000/relative/add_patient
-Token: 45323fa3a94789355c12246ed14b6b36546875204e6f762031312032313a30393a31372032303231
-Content-Type: application/json
-
-{
-  "PatientBd": "1998-01-04",
-  "PRName": "Derman",
-  "PRNum": "05378270553",
-  "PRName2": "Dilek",
-  "PRNum2": "05318874348",
-  "PatientGender": "M",
-  "PatientAddress": "Karaagac Konarli Mahallesi 6. Sokak no 8",
-  "PatientTc": "10952336010",
-  "PatientName": "Ali",
-  "PatientSurname": "Akgol",
-  "PRSurname": "Keskinkilinc",
-  "PRSurname2": "Yayman"
-}
-
-<> 2021-11-12T190528.400.json
 
 ###
 

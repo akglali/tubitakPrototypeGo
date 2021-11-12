@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	database.ConnectDatabase() // connection starts at the beginning
 	router.Use(func(context *gin.Context) {

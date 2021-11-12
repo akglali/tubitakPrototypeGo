@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
 	"tubitakPrototypeGo/relative/relativeDatabase"
 )
@@ -40,14 +41,16 @@ func signPatient(c *gin.Context) {
 		helpers.MyAbort(c, "Girmis oldugunuz mail adresi gecerli degildir.")
 		return
 	}
-	token, password, patientTc := relativeDatabase.CheckPasswordDb(body.Email)
+	token, password, patientTc, hasPatient := relativeDatabase.CheckPasswordDb(body.Email)
 	if !helpers.Checkpassword(body.Password, password) {
 		helpers.MyAbort(c, "Check Your password.")
 		return
 	}
+
 	c.JSON(200, gin.H{
-		"token":     token,
-		"patientTc": patientTc,
+		"token":      token,
+		"patientTc":  patientTc,
+		"hasPatient": hasPatient,
 	})
 
 }
@@ -107,6 +110,7 @@ func addPatient(c *gin.Context) {
 		helpers.MyAbort(c, "Hasta onceden kayit edilmistir!")
 		return
 	}
+	database.Db.QueryRow("update patient_relatives_table set has_patient=true where token=$1", token)
 	c.JSON(200, "Patient Is Added")
 
 }
