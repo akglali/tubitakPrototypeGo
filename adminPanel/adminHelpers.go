@@ -100,13 +100,13 @@ func getAllBeaconRows(offSet int) ([]allBeaconInfo, error) {
 }
 
 //get single patients all information
-func getSinglePatientInfoRow(patientId string) allSinglePatientInfo {
+func getSinglePatientInfoRow(patientId string) (allSinglePatientInfo, error) {
 
 	var patientInfo allSinglePatientInfo
 	row := adminPanelDatabase.GetSinglePatientAllInfo(patientId)
 	err := row.Scan(&patientInfo.PatientTc, &patientInfo.PatientName, &patientInfo.PatientSurname, &patientInfo.PatientBd, &patientInfo.PatientR1Name, &patientInfo.PatientR1Surname, &patientInfo.PatientR1Num, &patientInfo.PatientR2Name, &patientInfo.PatientR2Surname, &patientInfo.PatientR2Num, &patientInfo.PatientGender, &patientInfo.PatientAddress)
 	if err != nil {
-		return allSinglePatientInfo{}
+		return allSinglePatientInfo{}, err
 	}
-	return patientInfo
+	return patientInfo, nil
 }

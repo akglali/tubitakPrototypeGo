@@ -120,7 +120,11 @@ func getSingleBeaconTrackingInfo(c *gin.Context) {
 
 func getSinglePatientInfo(c *gin.Context) {
 	patientId := c.Param("singlePatientId")
-	row := getSinglePatientInfoRow(patientId)
+	row, err := getSinglePatientInfoRow(patientId)
+	if err != nil {
+		helpers.MyAbort(c, "Patient couldn't be got it")
+		return
+	}
 
 	c.JSON(200, row)
 }
