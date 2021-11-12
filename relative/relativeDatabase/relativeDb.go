@@ -56,11 +56,28 @@ func AddPatient(PatientBd, PRName, PRNum, PRName2, PRNum2, PatientGender, Patien
 
 //Common Functions
 
-func EmailExistDB(value string) bool {
+func EmailExistDB(email string) bool {
 	var emailExist bool
-	err := database.Db.QueryRow("select exists(select 1 from patient_relatives_table where email=$1)", value).Scan(&emailExist)
+	err := database.Db.QueryRow("select exists(select 1 from patient_relatives_table where email=$1)", email).Scan(&emailExist)
 	if err != nil {
 		return false
 	}
 	return emailExist
+}
+
+func TokenExist(token string) bool {
+	var emailExist bool
+	err := database.Db.QueryRow("select exists(select 1 from patient_relatives_table where token=$1)", token).Scan(&emailExist)
+	if err != nil {
+		return false
+	}
+	return emailExist
+}
+
+//getLastLocation Db
+
+func GetLastLocationDb(patientTc string) *sql.Row {
+	row := database.Db.QueryRow("select patient_tc, patient_name, patient_surname, bdt.location,ptit.seen_time from patient_table left join patient_tracker_info_table ptit on patient_table.patient_id = ptit.patient_id left join beacon_devices_table bdt  on bdt.device_id=ptit.beacon_id where patient_tc=$1 order by patient_name,ptit.seen_time desc limit 1", patientTc)
+	return row
+
 }

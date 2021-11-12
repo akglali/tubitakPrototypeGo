@@ -20,3 +20,13 @@ func getSinglePatientRows(patientId string, offSet int) ([]singlePatient, error)
 	return allRows, err
 
 }
+
+func getLastLocationRow(patientTc string) (getLastLocationSt, error) {
+	var lasLocation getLastLocationSt
+	row := relativeDatabase.GetLastLocationDb(patientTc)
+	err := row.Scan(&lasLocation.PatientTc, &lasLocation.PatientName, &lasLocation.PatientSurname, &lasLocation.LastSeenTime, &lasLocation.Location)
+	if err != nil {
+		return getLastLocationSt{}, err
+	}
+	return lasLocation, nil
+}

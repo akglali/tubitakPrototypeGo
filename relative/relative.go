@@ -2,6 +2,7 @@ package relative
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"tubitakPrototypeGo/helpers"
@@ -13,6 +14,7 @@ func SetupPatientRelative(rg *gin.RouterGroup) {
 	rg.POST("/change_password", changePassword)
 	rg.POST("/add_patient", addPatient)
 	rg.GET("/patient_tracking_info/:patientId/:page", getPatientTrackingInfo)
+	rg.GET("/last_location/:patientId", getLastLocation)
 
 }
 
@@ -94,7 +96,7 @@ func addPatient(c *gin.Context) {
 		return
 	}
 	token := c.GetHeader("token")
-	checkTokenExist := relativeDatabase.EmailExistDB(token)
+	checkTokenExist := relativeDatabase.TokenExist(token)
 	if !checkTokenExist {
 		helpers.MyAbort(c, "Birseyler hatali gitti lutfen yeniden baglanin!")
 		return
@@ -102,7 +104,7 @@ func addPatient(c *gin.Context) {
 
 	err = relativeDatabase.AddPatient(body.PatientBd, body.PRName, body.PRNum, body.PRName2, body.PRNum2, body.PatientGender, body.PatientAddress, body.PatientTc, body.PatientName, body.PatientSurname, body.PRSurname, body.PRSurname2)
 	if err != nil {
-		helpers.MyAbort(c, "Hasta eklerken birseyler hatali gitti lutfen yeniden baglanin!")
+		helpers.MyAbort(c, "Hasta onceden kayit edilmistir!")
 		return
 	}
 	c.JSON(200, "Patient Is Added")
@@ -113,7 +115,7 @@ const itemsPerPage = 5
 
 func getPatientTrackingInfo(c *gin.Context) {
 	token := c.GetHeader("token")
-	checkTokenExist := relativeDatabase.EmailExistDB(token)
+	checkTokenExist := relativeDatabase.TokenExist(token)
 	if !checkTokenExist {
 		helpers.MyAbort(c, "Birseyler hatali gitti lutfen yeniden baglanin!")
 		return
@@ -131,5 +133,23 @@ func getPatientTrackingInfo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, allPatientTrackInfo)
+
+}
+
+func getLastLocation(c *gin.Context) {
+	token := c.GetHeader("token")
+	checkTokenExist := relativeDatabase.TokenExist(token)
+	if !checkTokenExist {
+		helpers.MyAbort(c, "Birseyler hatali gitti lutfen yeniden baglanin!")
+		return
+	}
+	patientId := c.Param("patientId")
+	lastLocation, err := getLastLocationRow(patientId)
+	if err != nil {
+		fmt.Println(err)
+		helpers.MyAbort(c, "Hastanin kayitli bilgisi bulunamamistir.")
+		return
+	}
+	c.JSON(200, lastLocation)
 
 }

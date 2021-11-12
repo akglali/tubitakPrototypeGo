@@ -31,3 +31,11 @@ type singlePatient struct {
 	SeenTime      string
 	GoogleMapLink string
 }
+
+type getLastLocationSt struct {
+	PatientTc      string
+	PatientName    string
+	PatientSurname string
+	LastSeenTime   string
+	Location       string
+}
