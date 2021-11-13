@@ -63,13 +63,14 @@ func getAllBeaconInfo(c *gin.Context) {
 		helpers.MyAbort(c, "Page Number Format is wrong")
 		return
 	}
-	allBeaconsInfoRows, err := getAllBeaconRows(offSet * itemsPerPage)
+	allBeaconsInfoRows, totalBeconNum, err := getAllBeaconRows(offSet * itemsPerPage)
 	if err != nil {
 		fmt.Println(err)
 		helpers.MyAbort(c, "Could not reach beacons info")
 		return
 	}
-	c.JSON(200, allBeaconsInfoRows)
+	c.JSON(200, gin.H{"allBeaconsInfoRows": allBeaconsInfoRows,
+		"totalBeaconNum": totalBeconNum})
 }
 
 func getAllPatientInfo(c *gin.Context) {
@@ -78,12 +79,15 @@ func getAllPatientInfo(c *gin.Context) {
 		helpers.MyAbort(c, "Page Number Format is wrong")
 		return
 	}
-	allPatientsInfoRows, err := getAllPatientRows(offSet * itemsPerPage)
+	allPatientsInfoRows, totalPatientNum, err := getAllPatientRows(offSet * itemsPerPage)
 	if err != nil {
 		helpers.MyAbort(c, "Could not reach patients info")
 		return
 	}
-	c.JSON(200, allPatientsInfoRows)
+	c.JSON(200, gin.H{
+		"allPatientsInfoRows": allPatientsInfoRows,
+		"totalPatientNum":     totalPatientNum,
+	})
 }
 
 func getSinglePatientTrackingInfo(c *gin.Context) {
@@ -93,12 +97,15 @@ func getSinglePatientTrackingInfo(c *gin.Context) {
 		return
 	}
 	patientId := c.Param("patientId")
-	allPatientTrackInfo, err := getSinglePatientRows(patientId, offSet*itemsPerPage)
+	allPatientTrackInfo, totalSinglePatientNum, err := getSinglePatientRows(patientId, offSet*itemsPerPage)
 	if err != nil {
 		helpers.MyAbort(c, "Something went wrong for "+patientId)
 		return
 	}
-	c.JSON(200, allPatientTrackInfo)
+	c.JSON(200, gin.H{
+		"totalSinglePatientNum": totalSinglePatientNum,
+		"allPatientTrackInfo":   allPatientTrackInfo,
+	})
 
 }
 
@@ -109,12 +116,15 @@ func getSingleBeaconTrackingInfo(c *gin.Context) {
 		return
 	}
 	beaconId := c.Param("beaconId")
-	allBeaconTrackingInfo, err := getSingleBeaconId(beaconId, offSet*itemsPerPage)
+	allBeaconTrackingInfo, singleBeaconTrackNum, err := getSingleBeaconId(beaconId, offSet*itemsPerPage)
 	if err != nil {
 		helpers.MyAbort(c, "Something went wrong for "+beaconId)
 		return
 	}
-	c.JSON(200, allBeaconTrackingInfo)
+	c.JSON(200, gin.H{
+		"singleBeaconTrackNum":  singleBeaconTrackNum,
+		"allBeaconTrackingInfo": allBeaconTrackingInfo,
+	})
 
 }
 

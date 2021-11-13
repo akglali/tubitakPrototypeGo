@@ -23,6 +23,7 @@ func main() {
 			context.Abort()
 		}
 	})
+
 	//this is for the patient info
 	patient := router.Group("/patient")
 	login.SetupLogin(patient)

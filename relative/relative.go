@@ -32,7 +32,7 @@ func signPatient(c *gin.Context) {
 		return
 	}
 	if !helpers.EmailIsValid(body.Email) {
-		helpers.MyAbort(c, "Check your email type!!!")
+		helpers.MyAbort(c, "Email formatı yanlış!")
 		return
 	}
 
@@ -43,7 +43,7 @@ func signPatient(c *gin.Context) {
 	}
 	token, password, patientTc, hasPatient := relativeDatabase.CheckPasswordDb(body.Email)
 	if !helpers.Checkpassword(body.Password, password) {
-		helpers.MyAbort(c, "Check Your password.")
+		helpers.MyAbort(c, "Parola Yanlış!")
 		return
 	}
 
