@@ -122,8 +122,8 @@ func getSingleBeaconTrackingInfo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, gin.H{
-		"singleBeaconTrackNum":  singleBeaconTrackNum,
-		"allBeaconTrackingInfo": allBeaconTrackingInfo,
+		"totalSingleBeaconTrackNum": singleBeaconTrackNum,
+		"allBeaconTrackingInfo":     allBeaconTrackingInfo,
 	})
 
 }
