@@ -24,7 +24,7 @@ func getSinglePatientRows(patientId string, offSet int) ([]singlePatient, error)
 func getLastLocationRow(patientTc string) (getLastLocationSt, error) {
 	var lasLocation getLastLocationSt
 	row := relativeDatabase.GetLastLocationDb(patientTc)
-	err := row.Scan(&lasLocation.PatientTc, &lasLocation.PatientName, &lasLocation.PatientSurname, &lasLocation.LastSeenTime, &lasLocation.Location)
+	err := row.Scan(&lasLocation.PatientTc, &lasLocation.PatientName, &lasLocation.PatientSurname, &lasLocation.LastSeenTime, &lasLocation.Location, &lasLocation.Distance)
 	if err != nil {
 		return getLastLocationSt{}, err
 	}

@@ -3,9 +3,9 @@ package relative
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/barisesen/tcverify"
 	"github.com/gin-gonic/gin"
 	"strconv"
-	"tubitakPrototypeGo/database"
 	"tubitakPrototypeGo/helpers"
 	"tubitakPrototypeGo/relative/relativeDatabase"
 )
@@ -104,18 +104,22 @@ func addPatient(c *gin.Context) {
 		helpers.MyAbort(c, "Birseyler hatali gitti lutfen yeniden baglanin!")
 		return
 	}
+	resp, err := tcverify.Validate(body.PatientTc)
+	if err != nil || !resp {
+		helpers.MyAbort(c, "Tc is not valid!")
+		return
+	}
 
-	err = relativeDatabase.AddPatient(body.PatientBd, body.PRName, body.PRNum, body.PRName2, body.PRNum2, body.PatientGender, body.PatientAddress, body.PatientTc, body.PatientName, body.PatientSurname, body.PRSurname, body.PRSurname2)
+	err = relativeDatabase.AddPatient(body.PatientBd, body.PRName, body.PRNum, body.PRName2, body.PRNum2, body.PatientGender, body.PatientAddress, body.PatientTc, body.PatientName, body.PatientSurname, body.PRSurname, body.PRSurname2, token)
 	if err != nil {
 		helpers.MyAbort(c, "Hasta onceden kayit edilmistir!")
 		return
 	}
-	database.Db.QueryRow("update patient_relatives_table set has_patient=true where token=$1", token)
 	c.JSON(200, "Patient Is Added")
 
 }
 
-const itemsPerPage = 5
+const itemsPerPage = 10
 
 func getPatientTrackingInfo(c *gin.Context) {
 	token := c.GetHeader("token")
