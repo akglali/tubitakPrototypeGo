@@ -2,6 +2,6 @@ POST http://localhost:8000/admin/add_relative
 Content-Type: application/json
 
 {
-  "email": "aliakgol97_@hotmail.com",
-  "patienttc": "13132546308"
+  "email": "sultanguvenbas@gmail.com",
+  "patienttc": "13708957224"
 }

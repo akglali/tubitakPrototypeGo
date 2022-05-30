@@ -31,9 +31,9 @@ func EmailIsValid(email string) bool {
 //Code will be sent to email.
 func SendEmail(code, mail string) {
 	//put ur e-mail address that you want to sent e-mail by.
-	from := "emailverifiy8@gmail.com"
+	from := "example@gmail.com"
 	//put your email' password!!!
-	pass := "emailonayla"
+	pass := "examplepassword"
 
 	to := []string{
 		mail,
