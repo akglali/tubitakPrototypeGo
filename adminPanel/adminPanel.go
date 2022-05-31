@@ -50,7 +50,7 @@ func signup(c *gin.Context) {
 	var username string
 	err = adminPanelDatabase.SignUpDb(body.Username, password, &username)
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		helpers.MyAbort(c, "Admin Is already exist")
 		return
 	}
