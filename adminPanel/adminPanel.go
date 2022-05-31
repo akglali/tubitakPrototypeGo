@@ -19,7 +19,7 @@ func SetupAdminPanel(rg *gin.RouterGroup) {
 	rg.GET("/get_info_patient/:patientId/:page", getSinglePatientTrackingInfo)
 	rg.GET("/get_single_patient/:singlePatientId", getSinglePatientInfo)
 	rg.GET("/get_info_beacon/:beaconId/:page", getSingleBeaconTrackingInfo)
-	rg.POST("/add_relative", sendPassword)
+	rg.POST("/add_relative", addRelative)
 
 }
 
@@ -140,7 +140,7 @@ func getSinglePatientInfo(c *gin.Context) {
 	c.JSON(200, row)
 }
 
-func sendPassword(c *gin.Context) {
+func addRelative(c *gin.Context) {
 	body := emailStruct{}
 	data, err := c.GetRawData()
 	if err != nil {
