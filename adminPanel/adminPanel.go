@@ -66,7 +66,7 @@ func getAllBeaconInfo(c *gin.Context) {
 	}
 	allBeaconsInfoRows, totalBeconNum, err := getAllBeaconRows(offSet * itemsPerPage)
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		helpers.MyAbort(c, "Could not reach beacons info")
 		return
 	}
